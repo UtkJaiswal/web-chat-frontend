@@ -1,0 +1,21 @@
+/* src/components/Chat.css */
+
+.chat-window {
+    height: 300px;
+    width: 400px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    overflow-y: scroll;
+    margin-bottom: 10px;
+  }
+  
+  input {
+    width: calc(100% - 60px);
+    padding: 10px;
+  }
+  
+  button {
+    padding: 10px;
+    width: 50px;
+  }
+  
