@@ -1,19 +1,33 @@
-// src/App.js
-
 import React from 'react';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './components/Login';
+import Register from './components/Register';
 import Chat from './components/Chat';
-import './components/Chat.css';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Chat Application</h1>
-      </header>
-      <Chat />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route 
+          path="/chat" 
+          element={
+            <PrivateRoute>
+              <Chat />
+            </PrivateRoute>
+          } 
+        />
+        <Route path="/" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </Router>
   );
-}
+};
+
+// PrivateRoute component to handle authentication
+const PrivateRoute = ({ children }) => {
+  const token = localStorage.getItem('jwt');
+  return token ? children : <Navigate to="/login" replace />;
+};
 
 export default App;
