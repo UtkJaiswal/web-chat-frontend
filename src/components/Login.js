@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './Login.css';
 
 const Login = () => {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -22,30 +24,39 @@ const Login = () => {
         localStorage.setItem('jwt', data.jwt);
         navigate('/chat');
       } else {
-        console.error('Login failed:', data);
+        setError('Invalid login credentials');
+        setTimeout(() => {
+          setError('');
+        }, 3000);
       }
     } catch (error) {
-      console.error('Error during login:', error);
+      setError('An error occurred during login');
+      setTimeout(() => {
+        setError('');
+      }, 3000);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>Login</h1>
-      <input
-        type="text"
-        value={identifier}
-        onChange={(e) => setIdentifier(e.target.value)}
-        placeholder="Email"
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-      />
-      <button type="submit">Login</button>
-    </form>
+    <div className="login-container">
+      <form onSubmit={handleSubmit} className="login-form">
+        <h1>Login</h1>
+        {error && <div className="error-message">{error}</div>}
+        <input
+          type="text"
+          value={identifier}
+          onChange={(e) => setIdentifier(e.target.value)}
+          placeholder="Email"
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+        />
+        <button type="submit">Login</button>
+      </form>
+    </div>
   );
 };
 

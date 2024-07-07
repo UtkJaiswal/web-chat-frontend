@@ -48,12 +48,12 @@ const Chat = () => {
       });
       const data = await response.json();
       const formattedMessages = data.data.flatMap((item, index) => {
-        const messageData = JSON.parse(item.attributes.message);
+        const messageData = item.attributes
         return [
           {
             id: `${index}-sent`,
-            message: messageData.message,
-            createdBy: messageData.user,
+          message: messageData.message,
+          createdBy: messageData.user,
             isCurrentUser: true
           },
           {
@@ -76,12 +76,12 @@ const Chat = () => {
     ws.current.onopen = () => console.log('WebSocket connection established');
     ws.current.onmessage = (event) => {
       const parsedData = JSON.parse(event.data);
-      const messageData = JSON.parse(parsedData.message);
+      const messageData = parsedData
       const newMessages = [
         {
           id: `${Date.now()}-sent`,
-          message: messageData.message,
-          createdBy: messageData.user,
+        message: messageData.message,
+        createdBy: messageData.user,
           isCurrentUser: true
         },
         {
@@ -100,13 +100,14 @@ const Chat = () => {
   const sendMessage = async (e) => {
     e.preventDefault();
     if (ws.current && ws.current.readyState === WebSocket.OPEN && inputValue.trim()) {
-      const messageData = { 
-        message: inputValue, 
-        user: userId,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
-      ws.current.send(JSON.stringify({ message: JSON.stringify(messageData) }));
+      // const messageData = { 
+      //   message: inputValue, 
+      //   user: userId,
+      //   createdAt: new Date().toISOString(),
+      //   updatedAt: new Date().toISOString()
+      // };
+      console.log(inputValue)
+      ws.current.send(JSON.stringify(inputValue));
       const newMessages = [
         { id: `${Date.now()}-sent`, message: inputValue, createdBy: userId, isCurrentUser: true },
         { id: `${Date.now()}-received`, message: inputValue, createdBy: userId, isCurrentUser: false }
@@ -129,7 +130,7 @@ const Chat = () => {
   return (
     <div className="chat-container">
       <div className="chat-header">
-        <h2>WhatsApp Chat</h2>
+        <h2>Chat</h2>
         <button onClick={handleLogout} className="logout-btn">Logout</button>
       </div>
       <div className="message-list">
